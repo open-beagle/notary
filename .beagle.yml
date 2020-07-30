@@ -1,0 +1,102 @@
+platform: 10.11.92.33
+
+workspace:
+  path: src/github.com/theupdateframework/notary
+
+clone:
+  git:
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-git:1.0
+    pull: true
+    dns: 223.5.5.5
+
+pipeline:
+
+  signer-golang:
+    image: registry.cn-qingdao.aliyuncs.com/wod/golang:1.14.6-alpine
+    pull: true
+    dns: 223.5.5.5
+    volumes:
+      - /data/cache/golang/pkg:/go/pkg
+    environment:
+      - NOTARYPKG=github.com/theupdateframework/notary
+    commands:
+      - mkdir -p dist    
+      - apk add --update git gcc libc-dev
+      - go get -tags 'mysql postgres file' github.com/mattes/migrate/cli
+      - mv /go/bin/cli dist/migrate
+      - go install -tags pkcs11 -ldflags "-w -X ${NOTARYPKG}/version.GitCommit=`git rev-parse --short HEAD` -X ${NOTARYPKG}/version.NotaryVersion=`cat NOTARY_VERSION`" ${NOTARYPKG}/cmd/notary-signer
+      - mv /go/bin/notary-signer dist/notary-signer
+
+  signer-docker:
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    pull: true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    base: registry.cn-qingdao.aliyuncs.com/wod/alpine:3.12
+    dockerfile: .beagle/signer.dockerfile
+    repo: wod/awecloud-notary-signer
+    version: "v0.6.1"
+    registry: registry.cn-qingdao.aliyuncs.com
+    secrets: 
+      - source: REGISTRY_USER_ALIYUN
+        target: REGISTRY_USER
+      - source: REGISTRY_PASSWORD_ALIYUN
+        target: REGISTRY_PASSWORD
+
+  signer-harbor:
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-harbor:1.0
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    repo: wod/awecloud-notary-signer
+    tag: "v0.6.1-v1.8.6"
+    registry: registry.cn-qingdao.aliyuncs.com
+    secrets: 
+      - source: REGISTRY_USER_ALIYUN
+        target: REGISTRY_USER
+      - source: REGISTRY_PASSWORD_ALIYUN
+        target: REGISTRY_PASSWORD
+
+  server-golang:
+    image: registry.cn-qingdao.aliyuncs.com/wod/golang:1.14.6-alpine
+    pull: true
+    dns: 223.5.5.5
+    volumes:
+      - /data/cache/golang/pkg:/go/pkg
+    environment:
+      - NOTARYPKG=github.com/theupdateframework/notary
+    commands:
+      - mkdir -p dist    
+      - apk add --update git gcc libc-dev
+      - go get -tags 'mysql postgres file' github.com/mattes/migrate/cli
+      - mv /go/bin/cli dist/migrate
+      - go install -tags pkcs11 -ldflags "-w -X ${NOTARYPKG}/version.GitCommit=`git rev-parse --short HEAD` -X ${NOTARYPKG}/version.NotaryVersion=`cat NOTARY_VERSION`" ${NOTARYPKG}/cmd/notary-server
+      - mv /go/bin/notary-server dist/notary-server
+
+  server-docker:
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    pull: true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    base: registry.cn-qingdao.aliyuncs.com/wod/alpine:3.12
+    dockerfile: .beagle/server.dockerfile
+    repo: wod/awecloud-notary-server
+    version: "v0.6.1"
+    registry: registry.cn-qingdao.aliyuncs.com
+    secrets: 
+      - source: REGISTRY_USER_ALIYUN
+        target: REGISTRY_USER
+      - source: REGISTRY_PASSWORD_ALIYUN
+        target: REGISTRY_PASSWORD
+
+  server-harbor:
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-harbor:1.0
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    repo: wod/awecloud-notary-server
+    tag: "v0.6.1-v1.8.6"
+    registry: registry.cn-qingdao.aliyuncs.com
+    secrets: 
+      - source: REGISTRY_USER_ALIYUN
+        target: REGISTRY_USER
+      - source: REGISTRY_PASSWORD_ALIYUN
+        target: REGISTRY_PASSWORD           
