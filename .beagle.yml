@@ -49,8 +49,8 @@ pipeline:
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-harbor:1.0
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    repo: wod/awecloud-notary-signer
-    tag: "v0.6.1-v1.8.6"
+    repo: wod/awecloud-harbor-notary-signer
+    tag: "v1.8.6"
     registry: registry.cn-qingdao.aliyuncs.com
     secrets: 
       - source: REGISTRY_USER_ALIYUN
@@ -96,8 +96,8 @@ pipeline:
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-harbor:1.0
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    repo: wod/awecloud-notary-server
-    tag: "v0.6.1-v1.8.6"
+    repo: wod/awecloud-harbor-notary-server
+    tag: "v1.8.6"
     registry: registry.cn-qingdao.aliyuncs.com
     secrets: 
       - source: REGISTRY_USER_ALIYUN
