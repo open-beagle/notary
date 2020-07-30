@@ -19,6 +19,7 @@ pipeline:
       - /data/cache/golang/pkg:/go/pkg
     environment:
       - NOTARYPKG=github.com/theupdateframework/notary
+      - GOPROXY=https://goproxy.cn,direct  
     commands:
       - mkdir -p dist    
       - apk add --update git gcc libc-dev
@@ -64,6 +65,7 @@ pipeline:
       - /data/cache/golang/pkg:/go/pkg
     environment:
       - NOTARYPKG=github.com/theupdateframework/notary
+      - GOPROXY=https://goproxy.cn,direct  
     commands:
       - mkdir -p dist    
       - apk add --update git gcc libc-dev
