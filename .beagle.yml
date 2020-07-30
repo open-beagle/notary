@@ -18,13 +18,13 @@ pipeline:
     volumes:
       - /data/cache/golang/pkg:/go/pkg
     environment:
-      - NOTARYPKG=github.com/theupdateframework/notary
       - GOPROXY=https://goproxy.cn,direct  
     commands:
       - mkdir -p dist    
       - apk add --update git gcc libc-dev
       - go get -tags 'mysql postgres file' github.com/mattes/migrate/cli
       - mv /go/bin/cli dist/migrate
+      - export NOTARYPKG=github.com/theupdateframework/notary
       - go install -tags pkcs11 -ldflags "-w -X ${NOTARYPKG}/version.GitCommit=`git rev-parse --short HEAD` -X ${NOTARYPKG}/version.NotaryVersion=`cat NOTARY_VERSION`" ${NOTARYPKG}/cmd/notary-signer
       - mv /go/bin/notary-signer dist/notary-signer
 
@@ -64,13 +64,13 @@ pipeline:
     volumes:
       - /data/cache/golang/pkg:/go/pkg
     environment:
-      - NOTARYPKG=github.com/theupdateframework/notary
       - GOPROXY=https://goproxy.cn,direct  
     commands:
       - mkdir -p dist    
       - apk add --update git gcc libc-dev
       - go get -tags 'mysql postgres file' github.com/mattes/migrate/cli
       - mv /go/bin/cli dist/migrate
+      - export NOTARYPKG=github.com/theupdateframework/notary      
       - go install -tags pkcs11 -ldflags "-w -X ${NOTARYPKG}/version.GitCommit=`git rev-parse --short HEAD` -X ${NOTARYPKG}/version.NotaryVersion=`cat NOTARY_VERSION`" ${NOTARYPKG}/cmd/notary-server
       - mv /go/bin/notary-server dist/notary-server
 
