@@ -11,7 +11,7 @@ clone:
 
 pipeline:
   signer-golang:
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-go-arm64:1.14.6-alpine
+    image: registry.cn-qingdao.aliyuncs.com/wod/golang-arm64:1.14.6-alpine
     pull: true
     dns: 223.5.5.5
     volumes:
@@ -58,7 +58,7 @@ pipeline:
         target: REGISTRY_PASSWORD
 
   server-golang:
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-go-arm64:1.14.6-alpine
+    image: registry.cn-qingdao.aliyuncs.com/wod/golang-arm64:1.14.6-alpine
     pull: true
     dns: 223.5.5.5
     volumes:
