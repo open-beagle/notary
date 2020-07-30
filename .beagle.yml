@@ -18,16 +18,16 @@ pipeline:
     volumes:
       - /data/cache/golang/pkg:/go/pkg
     environment:
-      - GOPROXY=https://goproxy.cn,direct  
+      - GOPROXY=https://goproxy.cn,direct
       - GOPATH=/go:/drone
     commands:
       - env | grep GO
-      - mkdir -p dist    
+      - mkdir -p dist
       - apk add --update git gcc libc-dev
       - go get -tags 'mysql postgres file' github.com/mattes/migrate/cli
       - mv /go/bin/cli dist/migrate
       - go install -tags pkcs11 -ldflags "-w -X github.com/theupdateframework/notary/version.GitCommit=`git rev-parse --short HEAD` -X github.com/theupdateframework/notary/version.NotaryVersion=`cat NOTARY_VERSION`" github.com/theupdateframework/notary/cmd/notary-signer
-      - mv /go/bin/notary-signer dist/notary-signer
+      - mv /drone/bin/notary-signer dist/notary-signer
 
   signer-docker:
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
@@ -74,7 +74,7 @@ pipeline:
       - go get -tags 'mysql postgres file' github.com/mattes/migrate/cli
       - mv /go/bin/cli dist/migrate
       - go install -tags pkcs11 -ldflags "-w -X github.com/theupdateframework/notary/version.GitCommit=`git rev-parse --short HEAD` -X github.com/theupdateframework/notary/version.NotaryVersion=`cat NOTARY_VERSION`" github.com/theupdateframework/notary/cmd/notary-server
-      - mv /go/bin/notary-server dist/notary-server
+      - mv /drone/bin/notary-server dist/notary-server
 
   server-docker:
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
