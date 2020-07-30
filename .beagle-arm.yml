@@ -33,7 +33,7 @@ pipeline:
     pull: true
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    base: registry.cn-qingdao.aliyuncs.com/wod/alpine-arm64:3.9
+    base: registry.cn-qingdao.aliyuncs.com/wod/alpine-arm64:3.12
     dockerfile: .beagle/signer.dockerfile
     repo: wod/awecloud-notary-signer-arm64
     version: "v0.6.1"
@@ -80,7 +80,7 @@ pipeline:
     pull: true
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    base: registry.cn-qingdao.aliyuncs.com/wod/alpine-arm64:3.9
+    base: registry.cn-qingdao.aliyuncs.com/wod/alpine-arm64:3.12
     dockerfile: .beagle/server.dockerfile
     repo: wod/awecloud-notary-server-arm64
     version: "v0.6.1"
