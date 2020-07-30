@@ -24,7 +24,7 @@ pipeline:
       - apk add --update git gcc libc-dev
       - go get -tags 'mysql postgres file' github.com/mattes/migrate/cli
       - mv /go/bin/cli dist/migrate
-      - export NOTARYPKG=github.com/theupdateframework/notary
+      - export GPPATH=/drone
       - go install -tags pkcs11 -ldflags "-w -X github.com/theupdateframework/notary/version.GitCommit=`git rev-parse --short HEAD` -X github.com/theupdateframework/notary/version.NotaryVersion=`cat NOTARY_VERSION`" github.com/theupdateframework/notary/cmd/notary-signer
       - mv /go/bin/notary-signer dist/notary-signer
 
