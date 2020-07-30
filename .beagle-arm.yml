@@ -10,7 +10,6 @@ clone:
     dns: 223.5.5.5
 
 pipeline:
-
   signer-golang:
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-go-arm64:1.14.6-alpine
     pull: true
