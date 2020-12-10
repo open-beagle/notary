@@ -26,6 +26,15 @@ mv /go/bin/cli dist/migrate && \
 go install -tags pkcs11 -ldflags "-w -X github.com/theupdateframework/notary/version.GitCommit=9b388060 -X github.com/theupdateframework/notary/version.NotaryVersion=0.6.1" github.com/theupdateframework/notary/cmd/notary-signer && \
 mv /drone/bin/notary-signer dist/notary-signer && \
 ls -ll dist
+
+# devops-go-arch
+docker run -it --rm \
+-w /drone/src/github.com/theupdateframework/notary \
+-v $PWD/:/drone/src/github.com/theupdateframework/notary \
+-e CI_WORKSPACE=/drone/src/github.com/theupdateframework/notary \
+-e PLUGIN_BINARY=notary-signer \
+-e PLUGIN_MAIN=cmd/notary-signer \
+registry.cn-qingdao.aliyuncs.com/wod/devops-go-arch:1.15.6-alpine
 ```
 
 ## images
