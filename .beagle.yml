@@ -11,33 +11,52 @@ clone:
 
 pipeline:
 
+  migrate:
+    image: registry.cn-qingdao.aliyuncs.com/wod/awecloud-migrate:v4.14.1
+    dns: 223.5.5.5
+    commands:
+      - mkdir -p dist
+      - mv /usr/local/bin/migrate dist/migrate-linux-amd64
+
+  migrate-arm64:
+    image: registry.cn-qingdao.aliyuncs.com/wod/awecloud-migrate-arm64:v4.14.1
+    dns: 223.5.5.5
+    commands:
+      - mkdir -p dist
+      - mv /usr/local/bin/migrate dist/migrate-linux-arm64
+
+  migrate-ppc64le:
+    image: registry.cn-qingdao.aliyuncs.com/wod/awecloud-migrate-ppc64le:v4.14.1
+    dns: 223.5.5.5
+    commands:
+      - mkdir -p dist
+      - mv /usr/local/bin/migrate dist/migrate-linux-ppc64le
+
+  migrate-mips64el:
+    image: registry.cn-qingdao.aliyuncs.com/wod/awecloud-migrate-mips64el:v4.14.1
+    dns: 223.5.5.5
+    commands:
+      - mkdir -p dist
+      - mv /usr/local/bin/migrate dist/migrate-linux-mips64le
+
   signer-golang:
-    image: registry.cn-qingdao.aliyuncs.com/wod/golang:1.14.6-alpine
-    pull: true
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-go-arch:1.15.5-buster
     dns: 223.5.5.5
     volumes:
-      - /data/cache/golang/pkg:/go/pkg
-    environment:
-      - GOPROXY=https://goproxy.cn,direct
-      - GOPATH=/go:/drone
-    commands:
-      - env | grep GO
-      - mkdir -p dist
-      - apk add --update git gcc libc-dev
-      - go get -tags 'mysql postgres file' github.com/mattes/migrate/cli
-      - mv /go/bin/cli dist/migrate
-      - go install -tags pkcs11 -ldflags "-w -X github.com/theupdateframework/notary/version.GitCommit=`git rev-parse --short HEAD` -X github.com/theupdateframework/notary/version.NotaryVersion=`cat NOTARY_VERSION`" github.com/theupdateframework/notary/cmd/notary-signer
-      - mv /drone/bin/notary-signer dist/notary-signer
+      - /data/cache/golang/mod:/go/pkg/mod
+    binary: notary-signer
+    main: cmd/notary-signer
 
   signer-docker:
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     pull: true
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    base: registry.cn-qingdao.aliyuncs.com/wod/alpine:3.12
+    base: registry.cn-qingdao.aliyuncs.com/wod/debian:buster-slim
     dockerfile: .beagle/signer.dockerfile
     repo: wod/awecloud-notary-signer
-    version: "v0.6.1"
+    version: "v2.1.1"
+    args: "TARGETOS=linux,TARGETARCH=amd64"
     registry: registry.cn-qingdao.aliyuncs.com
     secrets: 
       - source: REGISTRY_USER_ALIYUN
@@ -45,12 +64,50 @@ pipeline:
       - source: REGISTRY_PASSWORD_ALIYUN
         target: REGISTRY_PASSWORD
 
-  signer-harbor:
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-harbor:1.0
+  signer-docker-arm64:
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    pull: true
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    repo: wod/awecloud-harbor-notary-signer
-    tag: "v1.8.6"
+    base: registry.cn-qingdao.aliyuncs.com/wod/debian-arm64:buster-slim
+    dockerfile: .beagle/signer.dockerfile
+    repo: wod/awecloud-notary-signer-arm64
+    version: "v2.1.1"
+    args: "TARGETOS=linux,TARGETARCH=arm64"
+    registry: registry.cn-qingdao.aliyuncs.com
+    secrets: 
+      - source: REGISTRY_USER_ALIYUN
+        target: REGISTRY_USER
+      - source: REGISTRY_PASSWORD_ALIYUN
+        target: REGISTRY_PASSWORD
+
+  signer-docker-ppc64le:
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    pull: true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    base: registry.cn-qingdao.aliyuncs.com/wod/debian-ppc64le:buster-slim
+    dockerfile: .beagle/signer.dockerfile
+    repo: wod/awecloud-notary-signer-ppc64le
+    version: "v2.1.1"
+    args: "TARGETOS=linux,TARGETARCH=ppc64le"
+    registry: registry.cn-qingdao.aliyuncs.com
+    secrets: 
+      - source: REGISTRY_USER_ALIYUN
+        target: REGISTRY_USER
+      - source: REGISTRY_PASSWORD_ALIYUN
+        target: REGISTRY_PASSWORD
+
+  signer-docker-mips64el:
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    pull: true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    base: registry.cn-qingdao.aliyuncs.com/wod/debian-mips64el:buster-slim
+    dockerfile: .beagle/signer.dockerfile
+    repo: wod/awecloud-notary-signer-mips64el
+    version: "v2.1.1"
+    args: "TARGETOS=linux,TARGETARCH=mips64le"
     registry: registry.cn-qingdao.aliyuncs.com
     secrets: 
       - source: REGISTRY_USER_ALIYUN
@@ -59,32 +116,23 @@ pipeline:
         target: REGISTRY_PASSWORD
 
   server-golang:
-    image: registry.cn-qingdao.aliyuncs.com/wod/golang:1.14.6-alpine
-    pull: true
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-go-arch:1.15.5-buster
     dns: 223.5.5.5
     volumes:
-      - /data/cache/golang/pkg:/go/pkg
-    environment:
-      - GOPROXY=https://goproxy.cn,direct  
-      - GOPATH=/go:/drone
-    commands:
-      - env | grep GO
-      - mkdir -p dist    
-      - apk add --update git gcc libc-dev
-      - go get -tags 'mysql postgres file' github.com/mattes/migrate/cli
-      - mv /go/bin/cli dist/migrate
-      - go install -tags pkcs11 -ldflags "-w -X github.com/theupdateframework/notary/version.GitCommit=`git rev-parse --short HEAD` -X github.com/theupdateframework/notary/version.NotaryVersion=`cat NOTARY_VERSION`" github.com/theupdateframework/notary/cmd/notary-server
-      - mv /drone/bin/notary-server dist/notary-server
+      - /data/cache/golang/mod:/go/pkg/mod
+    binary: notary-server
+    main: cmd/notary-server
 
   server-docker:
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     pull: true
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    base: registry.cn-qingdao.aliyuncs.com/wod/alpine:3.12
+    base: registry.cn-qingdao.aliyuncs.com/wod/debian:buster-slim
     dockerfile: .beagle/server.dockerfile
     repo: wod/awecloud-notary-server
-    version: "v0.6.1"
+    version: "v2.1.1"
+    args: "TARGETOS=linux,TARGETARCH=amd64"
     registry: registry.cn-qingdao.aliyuncs.com
     secrets: 
       - source: REGISTRY_USER_ALIYUN
@@ -92,15 +140,53 @@ pipeline:
       - source: REGISTRY_PASSWORD_ALIYUN
         target: REGISTRY_PASSWORD
 
-  server-harbor:
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-harbor:1.0
+  server-docker-arm64:
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    pull: true
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    repo: wod/awecloud-harbor-notary-server
-    tag: "v1.8.6"
+    base: registry.cn-qingdao.aliyuncs.com/wod/debian-arm64:buster-slim
+    dockerfile: .beagle/server.dockerfile
+    repo: wod/awecloud-notary-server-arm64
+    version: "v2.1.1"
+    args: "TARGETOS=linux,TARGETARCH=arm64"
     registry: registry.cn-qingdao.aliyuncs.com
     secrets: 
       - source: REGISTRY_USER_ALIYUN
         target: REGISTRY_USER
       - source: REGISTRY_PASSWORD_ALIYUN
-        target: REGISTRY_PASSWORD           
+        target: REGISTRY_PASSWORD
+
+  server-docker-ppc64le:
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    pull: true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    base: registry.cn-qingdao.aliyuncs.com/wod/debian-ppc64le:buster-slim
+    dockerfile: .beagle/server.dockerfile
+    repo: wod/awecloud-notary-server-ppc64le
+    version: "v2.1.1"
+    args: "TARGETOS=linux,TARGETARCH=ppc64le"
+    registry: registry.cn-qingdao.aliyuncs.com
+    secrets: 
+      - source: REGISTRY_USER_ALIYUN
+        target: REGISTRY_USER
+      - source: REGISTRY_PASSWORD_ALIYUN
+        target: REGISTRY_PASSWORD
+
+  server-docker-mips64el:
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    pull: true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    base: registry.cn-qingdao.aliyuncs.com/wod/debian-mips64el:buster-slim
+    dockerfile: .beagle/server.dockerfile
+    repo: wod/awecloud-notary-server-mips64el
+    version: "v2.1.1"
+    args: "TARGETOS=linux,TARGETARCH=mips64le"
+    registry: registry.cn-qingdao.aliyuncs.com
+    secrets: 
+      - source: REGISTRY_USER_ALIYUN
+        target: REGISTRY_USER
+      - source: REGISTRY_PASSWORD_ALIYUN
+        target: REGISTRY_PASSWORD

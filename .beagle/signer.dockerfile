@@ -1,9 +1,17 @@
 ARG BASE
 
 FROM $BASE
-LABEL maintainer=mengkzhaoyun@gmail.com
 
-COPY ./dist /usr/bin
+ARG AUTHOR
+ARG VERSION
+
+LABEL maintainer=${AUTHOR} version=${VERSION}
+
+ARG TARGETOS
+ARG TARGETARCH
+
+COPY ./dist/migrate-$TARGETOS-$TARGETARCH /usr/bin/migrate
+COPY ./dist/notary-signer-$TARGETOS-$TARGETARCH /usr/bin/notary-signer
 COPY ./migrations /var/lib/notary/migrations
 COPY ./fixtures /var/lib/notary/fixtures
 
