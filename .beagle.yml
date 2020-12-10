@@ -46,6 +46,7 @@ pipeline:
       - /data/cache/golang/mod:/go/pkg/mod
     binary: notary-signer
     main: cmd/notary-signer
+    goargs: '-mod vendor'    
 
   signer-docker:
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
@@ -122,6 +123,7 @@ pipeline:
       - /data/cache/golang/mod:/go/pkg/mod
     binary: notary-server
     main: cmd/notary-server
+    goargs: '-mod vendor'    
 
   server-docker:
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
