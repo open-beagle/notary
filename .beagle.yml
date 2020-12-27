@@ -33,15 +33,15 @@ pipeline:
       - mkdir -p dist
       - mv /usr/local/bin/migrate dist/migrate-linux-ppc64le
 
-  migrate-mips64el:
-    image: registry.cn-qingdao.aliyuncs.com/wod/awecloud-migrate-mips64el:v4.14.1
+  migrate-mips64le:
+    image: registry.cn-qingdao.aliyuncs.com/wod/awecloud-migrate-mips64le:v4.14.1
     dns: 223.5.5.5
     commands:
       - mkdir -p dist
       - mv /usr/local/bin/migrate dist/migrate-linux-mips64le
 
   signer-golang:
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-go-arch:1.15.5-buster
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-go-arch:1.15.6-buster
     dns: 223.5.5.5
     volumes:
       - /data/cache/golang/mod:/go/pkg/mod
@@ -55,7 +55,7 @@ pipeline:
       - /var/run/docker.sock:/var/run/docker.sock
     base: registry.cn-qingdao.aliyuncs.com/wod/debian:buster-slim
     dockerfile: .beagle/signer.dockerfile
-    repo: wod/awecloud-notary-signer
+    repo: wod/harbor-notary-signer
     version: "v2.1.1"
     args: "TARGETOS=linux,TARGETARCH=amd64"
     registry: registry.cn-qingdao.aliyuncs.com
@@ -70,10 +70,11 @@ pipeline:
     pull: true
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    base: registry.cn-qingdao.aliyuncs.com/wod/debian-arm64:buster-slim
+    base: registry.cn-qingdao.aliyuncs.com/wod/debian:buster-slim-arm64
     dockerfile: .beagle/signer.dockerfile
-    repo: wod/awecloud-notary-signer-arm64
+    repo: wod/harbor-notary-signer
     version: "v2.1.1"
+    channel: arm64
     args: "TARGETOS=linux,TARGETARCH=arm64"
     registry: registry.cn-qingdao.aliyuncs.com
     secrets: 
@@ -87,10 +88,11 @@ pipeline:
     pull: true
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    base: registry.cn-qingdao.aliyuncs.com/wod/debian-ppc64le:buster-slim
+    base: registry.cn-qingdao.aliyuncs.com/wod/debian:buster-slim-ppc64le
     dockerfile: .beagle/signer.dockerfile
-    repo: wod/awecloud-notary-signer-ppc64le
+    repo: wod/harbor-notary-signer
     version: "v2.1.1"
+    channel: ppc64le
     args: "TARGETOS=linux,TARGETARCH=ppc64le"
     registry: registry.cn-qingdao.aliyuncs.com
     secrets: 
@@ -99,15 +101,16 @@ pipeline:
       - source: REGISTRY_PASSWORD_ALIYUN
         target: REGISTRY_PASSWORD
 
-  signer-docker-mips64el:
+  signer-docker-mips64le:
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     pull: true
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    base: registry.cn-qingdao.aliyuncs.com/wod/debian-mips64el:buster-slim
+    base: registry.cn-qingdao.aliyuncs.com/wod/debian:buster-slim-mips64le
     dockerfile: .beagle/signer.dockerfile
-    repo: wod/awecloud-notary-signer-mips64el
+    repo: wod/harbor-notary-signer
     version: "v2.1.1"
+    channel: mips64le
     args: "TARGETOS=linux,TARGETARCH=mips64le"
     registry: registry.cn-qingdao.aliyuncs.com
     secrets: 
@@ -117,7 +120,7 @@ pipeline:
         target: REGISTRY_PASSWORD
 
   server-golang:
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-go-arch:1.15.5-buster
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-go-arch:1.15.6-buster
     dns: 223.5.5.5
     volumes:
       - /data/cache/golang/mod:/go/pkg/mod
@@ -131,7 +134,7 @@ pipeline:
       - /var/run/docker.sock:/var/run/docker.sock
     base: registry.cn-qingdao.aliyuncs.com/wod/debian:buster-slim
     dockerfile: .beagle/server.dockerfile
-    repo: wod/awecloud-notary-server
+    repo: wod/harbor-notary-server
     version: "v2.1.1"
     args: "TARGETOS=linux,TARGETARCH=amd64"
     registry: registry.cn-qingdao.aliyuncs.com
@@ -146,10 +149,11 @@ pipeline:
     pull: true
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    base: registry.cn-qingdao.aliyuncs.com/wod/debian-arm64:buster-slim
+    base: registry.cn-qingdao.aliyuncs.com/wod/debian:buster-slim-arm64
     dockerfile: .beagle/server.dockerfile
-    repo: wod/awecloud-notary-server-arm64
+    repo: wod/harbor-notary-server
     version: "v2.1.1"
+    channel: arm64
     args: "TARGETOS=linux,TARGETARCH=arm64"
     registry: registry.cn-qingdao.aliyuncs.com
     secrets: 
@@ -163,10 +167,11 @@ pipeline:
     pull: true
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    base: registry.cn-qingdao.aliyuncs.com/wod/debian-ppc64le:buster-slim
+    base: registry.cn-qingdao.aliyuncs.com/wod/debian:buster-slim-ppc64le
     dockerfile: .beagle/server.dockerfile
-    repo: wod/awecloud-notary-server-ppc64le
+    repo: wod/harbor-notary-server
     version: "v2.1.1"
+    channel: ppc64le
     args: "TARGETOS=linux,TARGETARCH=ppc64le"
     registry: registry.cn-qingdao.aliyuncs.com
     secrets: 
@@ -175,15 +180,16 @@ pipeline:
       - source: REGISTRY_PASSWORD_ALIYUN
         target: REGISTRY_PASSWORD
 
-  server-docker-mips64el:
+  server-docker-mips64le:
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     pull: true
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    base: registry.cn-qingdao.aliyuncs.com/wod/debian-mips64el:buster-slim
+    base: registry.cn-qingdao.aliyuncs.com/wod/debian:buster-slim-mips64le
     dockerfile: .beagle/server.dockerfile
-    repo: wod/awecloud-notary-server-mips64el
+    repo: wod/harbor-notary-server
     version: "v2.1.1"
+    channel: mips64le
     args: "TARGETOS=linux,TARGETARCH=mips64le"
     registry: registry.cn-qingdao.aliyuncs.com
     secrets: 

@@ -41,8 +41,8 @@ registry.cn-qingdao.aliyuncs.com/wod/devops-go-arch:1.15.6-alpine
 
 ```bash
 # gitlab.wodcloud.com/cloud/migrate
-registry.cn-qingdao.aliyuncs.com/wod/awecloud-migrate:v4.14.1
-registry.cn-qingdao.aliyuncs.com/wod/awecloud-migrate-arm64:v4.14.1
-registry.cn-qingdao.aliyuncs.com/wod/awecloud-migrate-ppc64le:v4.14.1
-registry.cn-qingdao.aliyuncs.com/wod/awecloud-migrate-mips64el:v4.14.1
+registry.cn-qingdao.aliyuncs.com/wod/migrate:v4.14.1
+registry.cn-qingdao.aliyuncs.com/wod/migrate:v4.14.1-arm64
+registry.cn-qingdao.aliyuncs.com/wod/migrate:v4.14.1-ppc64le
+registry.cn-qingdao.aliyuncs.com/wod/migrate:v4.14.1-mips64le
 ```
