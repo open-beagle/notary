@@ -13,28 +13,28 @@ clone:
 pipeline:
 
   migrate:
-    image: registry.cn-qingdao.aliyuncs.com/wod/awecloud-migrate:v4.14.1
+    image: registry.cn-qingdao.aliyuncs.com/wod/migrate:v4.14.1
     dns: 223.5.5.5
     commands:
       - mkdir -p dist
       - mv /usr/local/bin/migrate dist/migrate-linux-amd64
 
   migrate-arm64:
-    image: registry.cn-qingdao.aliyuncs.com/wod/awecloud-migrate-arm64:v4.14.1
+    image: registry.cn-qingdao.aliyuncs.com/wod/migrate:v4.14.1-arm64
     dns: 223.5.5.5
     commands:
       - mkdir -p dist
       - mv /usr/local/bin/migrate dist/migrate-linux-arm64
 
   migrate-ppc64le:
-    image: registry.cn-qingdao.aliyuncs.com/wod/awecloud-migrate-ppc64le:v4.14.1
+    image: registry.cn-qingdao.aliyuncs.com/wod/migrate:v4.14.1-ppc64le
     dns: 223.5.5.5
     commands:
       - mkdir -p dist
       - mv /usr/local/bin/migrate dist/migrate-linux-ppc64le
 
   migrate-mips64le:
-    image: registry.cn-qingdao.aliyuncs.com/wod/awecloud-migrate-mips64le:v4.14.1
+    image: registry.cn-qingdao.aliyuncs.com/wod/migrate:v4.14.1-mips64le
     dns: 223.5.5.5
     commands:
       - mkdir -p dist
