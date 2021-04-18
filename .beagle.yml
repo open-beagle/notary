@@ -56,7 +56,7 @@ pipeline:
     base: registry.cn-qingdao.aliyuncs.com/wod/debian:buster-slim
     dockerfile: .beagle/signer.dockerfile
     repo: wod/harbor-notary-signer
-    version: "v2.1.1"
+    version: "v2.1.3"
     args: "TARGETOS=linux,TARGETARCH=amd64"
     registry: registry.cn-qingdao.aliyuncs.com
     secrets: 
@@ -73,7 +73,7 @@ pipeline:
     base: registry.cn-qingdao.aliyuncs.com/wod/debian:buster-slim-arm64
     dockerfile: .beagle/signer.dockerfile
     repo: wod/harbor-notary-signer
-    version: "v2.1.1"
+    version: "v2.1.3"
     channel: arm64
     args: "TARGETOS=linux,TARGETARCH=arm64"
     registry: registry.cn-qingdao.aliyuncs.com
@@ -91,7 +91,7 @@ pipeline:
     base: registry.cn-qingdao.aliyuncs.com/wod/debian:buster-slim-ppc64le
     dockerfile: .beagle/signer.dockerfile
     repo: wod/harbor-notary-signer
-    version: "v2.1.1"
+    version: "v2.1.3"
     channel: ppc64le
     args: "TARGETOS=linux,TARGETARCH=ppc64le"
     registry: registry.cn-qingdao.aliyuncs.com
@@ -109,7 +109,7 @@ pipeline:
     base: registry.cn-qingdao.aliyuncs.com/wod/debian:buster-slim-mips64le
     dockerfile: .beagle/signer.dockerfile
     repo: wod/harbor-notary-signer
-    version: "v2.1.1"
+    version: "v2.1.3"
     channel: mips64le
     args: "TARGETOS=linux,TARGETARCH=mips64le"
     registry: registry.cn-qingdao.aliyuncs.com
@@ -135,7 +135,7 @@ pipeline:
     base: registry.cn-qingdao.aliyuncs.com/wod/debian:buster-slim
     dockerfile: .beagle/server.dockerfile
     repo: wod/harbor-notary-server
-    version: "v2.1.1"
+    version: "v2.1.3"
     args: "TARGETOS=linux,TARGETARCH=amd64"
     registry: registry.cn-qingdao.aliyuncs.com
     secrets: 
@@ -152,7 +152,7 @@ pipeline:
     base: registry.cn-qingdao.aliyuncs.com/wod/debian:buster-slim-arm64
     dockerfile: .beagle/server.dockerfile
     repo: wod/harbor-notary-server
-    version: "v2.1.1"
+    version: "v2.1.3"
     channel: arm64
     args: "TARGETOS=linux,TARGETARCH=arm64"
     registry: registry.cn-qingdao.aliyuncs.com
@@ -170,7 +170,7 @@ pipeline:
     base: registry.cn-qingdao.aliyuncs.com/wod/debian:buster-slim-ppc64le
     dockerfile: .beagle/server.dockerfile
     repo: wod/harbor-notary-server
-    version: "v2.1.1"
+    version: "v2.1.3"
     channel: ppc64le
     args: "TARGETOS=linux,TARGETARCH=ppc64le"
     registry: registry.cn-qingdao.aliyuncs.com
@@ -188,7 +188,7 @@ pipeline:
     base: registry.cn-qingdao.aliyuncs.com/wod/debian:buster-slim-mips64le
     dockerfile: .beagle/server.dockerfile
     repo: wod/harbor-notary-server
-    version: "v2.1.1"
+    version: "v2.1.3"
     channel: mips64le
     args: "TARGETOS=linux,TARGETARCH=mips64le"
     registry: registry.cn-qingdao.aliyuncs.com
