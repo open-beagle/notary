@@ -14,9 +14,8 @@ git merge upstream/v0.6.1
 
 ```bash
 docker run --rm -it \
--v $PWD/:/drone/src/github.com/theupdateframework/notary \
+-v $PWD/:/go/src/github.com/theupdateframework/notary \
 -e GOPROXY=https://goproxy.cn,direct \
--e GOPATH=/go:/drone \
 registry.cn-qingdao.aliyuncs.com/wod/golang:1.16.5-alpine \
 bash
 
@@ -31,11 +30,13 @@ ls -ll dist
 
 # devops-go-arch
 docker run -it --rm \
--w /drone/src/github.com/theupdateframework/notary \
--v $PWD/:/drone/src/github.com/theupdateframework/notary \
--e CI_WORKSPACE=/drone/src/github.com/theupdateframework/notary \
+-w /go/src/github.com/theupdateframework/notary \
+-v $PWD/:/go/src/github.com/theupdateframework/notary \
+-e CI_WORKSPACE=/go/src/github.com/theupdateframework/notary \
 -e PLUGIN_BINARY=notary-signer \
 -e PLUGIN_MAIN=cmd/notary-signer \
+-e PLUGIN_GOARGS='-tags pkcs11' \
+-e GO111MODULE=off \
 registry.cn-qingdao.aliyuncs.com/wod/devops-go-arch:1.16.5-alpine
 ```
 

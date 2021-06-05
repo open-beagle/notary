@@ -37,8 +37,11 @@ pipeline:
     dns: 223.5.5.5
     volumes:
       - /data/cache/golang/mod:/go/pkg/mod
+    environment:
+      - GO111MODULE=off
     binary: notary-signer
     main: cmd/notary-signer
+    goargs: -tags pkcs11
 
   signer-docker:
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
@@ -98,8 +101,11 @@ pipeline:
     dns: 223.5.5.5
     volumes:
       - /data/cache/golang/mod:/go/pkg/mod
+    environment:
+      - GO111MODULE=off
     binary: notary-server
     main: cmd/notary-server
+    goargs: -tags pkcs11
 
   server-docker:
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
