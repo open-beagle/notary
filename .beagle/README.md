@@ -1,5 +1,7 @@
 # version
 
+/go/src/gitlab.wodcloud.com/cloud/awecloud-goharbor-harbor/Makefile
+
 ```bash
 git remote add upstream git@github.com:theupdateframework/notary.git
 
@@ -15,7 +17,7 @@ docker run --rm -it \
 -v $PWD/:/drone/src/github.com/theupdateframework/notary \
 -e GOPROXY=https://goproxy.cn,direct \
 -e GOPATH=/go:/drone \
-registry.cn-qingdao.aliyuncs.com/wod/golang:1.14.6-alpine \
+registry.cn-qingdao.aliyuncs.com/wod/golang:1.16.5-alpine \
 bash
 
 env | grep GO && \
@@ -34,7 +36,7 @@ docker run -it --rm \
 -e CI_WORKSPACE=/drone/src/github.com/theupdateframework/notary \
 -e PLUGIN_BINARY=notary-signer \
 -e PLUGIN_MAIN=cmd/notary-signer \
-registry.cn-qingdao.aliyuncs.com/wod/devops-go-arch:1.15.6-alpine
+registry.cn-qingdao.aliyuncs.com/wod/devops-go-arch:1.16.5-alpine
 ```
 
 ## images
@@ -44,5 +46,4 @@ registry.cn-qingdao.aliyuncs.com/wod/devops-go-arch:1.15.6-alpine
 registry.cn-qingdao.aliyuncs.com/wod/migrate:v4.14.1
 registry.cn-qingdao.aliyuncs.com/wod/migrate:v4.14.1-arm64
 registry.cn-qingdao.aliyuncs.com/wod/migrate:v4.14.1-ppc64le
-registry.cn-qingdao.aliyuncs.com/wod/migrate:v4.14.1-mips64le
 ```
