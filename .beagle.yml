@@ -45,6 +45,8 @@ steps:
     volumes:
       - name: go
         path: /go/pkg
+    environment:
+      GO111MODULE: off
     settings:
       binary: notary-signer
       main: cmd/notary-signer
@@ -141,6 +143,8 @@ steps:
     volumes:
       - name: go
         path: /go/pkg
+    environment:
+      GO111MODULE: off
     settings:
       binary: notary-server
       main: cmd/notary-server
