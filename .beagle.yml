@@ -151,6 +151,24 @@ steps:
       main: cmd/notary-server
       goargs: -tags pkcs11
 
+  - name: server-docker-amd64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    volumes:
+      - name: docker
+        path: /var/run/docker.sock
+    settings:
+      dockerfile: .beagle/server.dockerfile
+      base: registry.cn-qingdao.aliyuncs.com/wod/debian:bullseye-slim-amd64
+      repo: wod/notary-server
+      version: v0.6.1
+      channel: 'amd64'
+      args: 'TARGETOS=linux,TARGETARCH=amd64'
+      registry: registry.cn-qingdao.aliyuncs.com
+      registry_user:
+        from_secret: REGISTRY_USER_ALIYUN
+      registry_password:
+        from_secret: REGISTRY_PASSWORD_ALIYUN
+
   - name: server-docker-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     volumes:
