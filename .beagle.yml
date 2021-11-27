@@ -13,7 +13,7 @@ volumes:
       path: /var/run/docker.sock
 
 workspace:
-  base: /go
+  base: /go/src
   path: github.com/theupdateframework/notary
 
 steps:
