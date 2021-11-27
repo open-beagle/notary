@@ -1,5 +1,5 @@
 kind: pipeline
-name: signer-docker
+name: docker
 
 platform:
   runner: 10.11.92.40
